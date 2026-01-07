@@ -1,0 +1,173 @@
+@use "@/assets/style/global.scss" as *;
+
+.login-page {
+  min-height: 100vh;
+  background: $bg-pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.login-card {
+  width: 1040px;
+  max-width: 100%;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(247, 97, 83, 0.12);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+}
+
+.login-illustration {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.illu-tag {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.illu-panel {
+  background: #fff7f3;
+  border: 1px solid rgba(247, 97, 83, 0.08);
+  border-radius: 0;
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.illu-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.illu-overlay {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.illu-text {
+  color: #fff;
+  font-size: 14px;
+}
+
+.illu-btn {
+  background: #fff;
+  color: #f76153;
+  border: none;
+  border-radius: 999px;
+  padding: 0 28px;
+  height: 26px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background: #fff;
+    color: #e84f43;
+  }
+}
+
+.login-form {
+  padding: 30px 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; // 增大垂直间距
+  justify-content: center; // 垂直居中卡片内容
+}
+
+.login-header {
+  margin-top: -20px; // 整体往上移动一些
+}
+
+.back-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffe7e3;
+  color: #f76153;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-header .logo {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #f76153 0%, #fcaea2 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+.brand {
+  margin: 0 !important;
+}
+
+.welcome {
+  margin: 0 !important;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.form-body {
+  width: 100%;
+}
+
+.form-item .label {
+  display: block;
+  margin-bottom: 6px;
+  color: #2e2e2e;
+  font-size: 13px;
+}
+
+// 输入框之间的间距
+.form-item + .form-item {
+  margin-top: 20px;
+}
+
+.label-row {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.submit-btn {
+  height: 44px;
+  font-weight: 600;
+  background: #f76153;
+  border: none;
+  margin-top: 12px; // 与上方输入框拉开距离
+}
+
+.divider {
+  text-align: center;
+  color: #8c8c8c;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+@media (max-width: 960px) {
+  .login-card {
+    grid-template-columns: 1fr;
+  }
+  .login-illustration {
+    display: none;
+  }
+}

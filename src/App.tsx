@@ -1,14 +1,12 @@
 import { ConfigProvider } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Button } from "antd";
 import { themeConfig } from "@/config/theme";
+import Login from "@/pages/Login/Login";
 
 function App() {
   return (
     <ConfigProvider theme={themeConfig}>
-      <div>
-        <QuestionCircleOutlined />
-        <Button type="primary">Primary Button</Button>
+      <div style={{ minHeight: "100vh", backgroundColor: "#F5F5F5" }}>
+        <Login />
       </div>
     </ConfigProvider>
   );
