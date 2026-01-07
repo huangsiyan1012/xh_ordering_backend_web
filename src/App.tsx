@@ -1,14 +1,16 @@
+import { ConfigProvider } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-
-import "antd/dist/antd.css";
+import { themeConfig } from "@/config/theme";
 
 function App() {
   return (
-    <div>
-      <QuestionCircleOutlined />
-      <Button type="primary">Primary Button</Button>
-    </div>
+    <ConfigProvider theme={themeConfig}>
+      <div>
+        <QuestionCircleOutlined />
+        <Button type="primary">Primary Button</Button>
+      </div>
+    </ConfigProvider>
   );
 }
 

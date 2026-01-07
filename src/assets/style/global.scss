@@ -1,11 +1,119 @@
-$color: pink;
+// 主题颜色变量
+$primary-color: #FFB6C1; // 淡粉色主色
+$primary-light: #FFC0CB; // 淡粉色浅色
+$primary-lighter: #FFE4E1; // 淡粉色极浅
+$primary-dark: #FF69B4; // 粉红色（用于选中状态）
+$bg-pink: #FFE4E1; // 淡粉色背景
+$bg-white: #FFFFFF; // 白色
+$accent-blue: #6BB6FF; // 淡蓝色辅助色
+$accent-blue-light: #E6F7FF; // 淡蓝色极浅（用于特殊交互）
+
 body {
-  background-color: $color;
+  background-color: $bg-pink;
+  color: #333333;
   // 禁用文字选中
   user-select: none;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
+
 img {
   // 禁止拖动图片
   -webkit-user-drag: none;
+}
+
+// 自定义滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F5F5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  border-radius: 4px;
+  
+  &:hover {
+    background: $primary-dark;
+  }
+}
+
+// 全局链接样式 - 使用淡蓝色作为链接色
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  transition: color 0.3s;
+  
+  &:hover {
+    color: $primary-color; // 悬停时变为淡粉色
+  }
+}
+
+// 全局卡片样式增强
+.ant-card {
+  border: 1px solid rgba(255, 182, 193, 0.2);
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(255, 182, 193, 0.25);
+    border-color: rgba(255, 182, 193, 0.4);
+    transition: all 0.3s;
+  }
+}
+
+// 全局按钮样式增强
+.ant-btn-primary {
+  background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
+  border: none;
+  
+  &:hover {
+    background: linear-gradient(135deg, $primary-light 0%, $primary-dark 100%);
+    box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 全局输入框焦点样式
+.ant-input:focus,
+.ant-input-focused {
+  border-color: $primary-color;
+  box-shadow: 0 0 0 2px rgba(255, 182, 193, 0.2);
+}
+
+// 输入框悬停时使用淡蓝色
+.ant-input:hover {
+  border-color: $accent-blue;
+}
+
+// 全局菜单选中样式
+.ant-menu-item-selected {
+  background-color: $primary-lighter !important;
+  color: $primary-dark !important;
+  
+  &::after {
+    border-right-color: $primary-dark !important;
+  }
+}
+
+// 菜单项悬停时使用淡蓝色
+.ant-menu-item:hover {
+  background-color: $accent-blue-light !important;
+  color: $accent-blue !important;
+}
+
+// 特殊交互使用淡蓝色（如标签、徽章等）
+.ant-tag-blue,
+.ant-badge-blue {
+  background-color: $accent-blue-light;
+  border-color: $accent-blue;
+  color: $accent-blue;
 }
   
