@@ -1,12 +1,14 @@
 @use "@/assets/style/global.scss" as *;
 
 .login-page {
-  min-height: 100vh;
+  height: 100vh; // 固定视口高度，避免垂直滚动
+  box-sizing: border-box;
   background: $bg-pink;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px;
+  padding: 24px 24px; // 略小的上下内边距，保证整体不超出视口
+  overflow: hidden;
 }
 
 .login-card {
@@ -84,27 +86,11 @@
 }
 
 .login-form {
-  padding: 30px 48px 40px;
+  padding: 10px 48px 50px;
   display: flex;
   flex-direction: column;
-  gap: 40px; // 增大垂直间距
+  gap: 50px; // 增大垂直间距
   justify-content: center; // 垂直居中卡片内容
-}
-
-.login-header {
-  margin-top: -20px; // 整体往上移动一些
-}
-
-.back-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ffe7e3;
-  color: #f76153;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  cursor: pointer;
 }
 
 .login-header .logo {
