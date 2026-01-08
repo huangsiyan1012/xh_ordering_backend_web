@@ -1,0 +1,86 @@
+@use "@/assets/style/global.scss" as *;
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; // 等比例放大1.5倍：20px → 30px
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); // 等比例放大1.5倍：180px → 270px
+  gap: 24px; // 等比例放大1.5倍：16px → 24px
+}
+
+.summary-card {
+  background: #fff;
+  border-radius: 15px; // 等比例放大1.5倍：10px → 15px
+  padding: 24px; // 等比例放大1.5倍：16px → 24px
+  box-shadow: 0 9px 27px rgba(0, 0, 0, 0.05); // 等比例放大1.5倍
+  border: 1px solid rgba(247, 97, 83, 0.08);
+}
+
+.summary-title {
+  font-size: 19.5px; // 等比例放大1.5倍：13px → 19.5px
+  color: #666;
+  margin-bottom: 12px; // 等比例放大1.5倍：8px → 12px
+}
+
+.summary-value {
+  font-size: 36px; // 等比例放大1.5倍：24px → 36px
+  font-weight: 700;
+  color: $primary-color;
+}
+
+.summary-value .unit {
+  font-size: 21px; // 等比例放大1.5倍：14px → 21px
+  margin-left: 9px; // 等比例放大1.5倍：6px → 9px
+  color: #999;
+  font-weight: 400;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 15px; // 等比例放大1.5倍：10px → 15px
+  box-shadow: 0 9px 27px rgba(0, 0, 0, 0.05); // 等比例放大1.5倍
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.panel-header {
+  padding: 21px 24px; // 等比例放大1.5倍：14px→21px, 16px→24px
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.panel-title {
+  font-size: 21px; // 等比例放大1.5倍：14px → 21px
+  font-weight: 600;
+  color: #333;
+}
+
+.panel-body {
+  padding: 18px 24px 24px; // 等比例放大1.5倍：12px→18px, 16px→24px
+  overflow-x: auto;
+}
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 19.5px; // 等比例放大1.5倍：13px → 19.5px
+}
+
+.simple-table th,
+.simple-table td {
+  padding: 15px 12px; // 等比例放大1.5倍：10px→15px, 8px→12px
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+}
+
+.simple-table th {
+  color: #666;
+  font-weight: 600;
+}
+
+.simple-table tr:last-child td {
+  border-bottom: none;
+}
+

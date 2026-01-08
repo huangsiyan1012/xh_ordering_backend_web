@@ -1,6 +1,12 @@
-// 路由规则表定义
-// 仅作为集中管理路由信息的配置表，真正的 Router 可在 App 中根据此表生成
+import React, {
+  lazy,
+  Suspense,
+  type ComponentType,
+  type LazyExoticComponent,
+} from "react";
+import { useRoutes, type RouteObject } from "react-router-dom";
 
+// 路由规则表定义
 export interface RouteMeta {
   /** 菜单 / 页面标题 */
   title: string;
@@ -41,16 +47,25 @@ export const appRoutes: AppRouteRecord[] = [
   {
     path: "/",
     name: "Root",
-    component: "@/layouts/BasicLayout", // 预留布局组件路径，可后续创建
+    component: "@/pages/layouts/BasicLayout",
     meta: {
       title: "首页",
       requiresAuth: true,
     },
     children: [
       {
+        path: "",
+        name: "DashboardHome",
+        component: "@/pages/Dashboard/Index",
+        meta: {
+          title: "控制台",
+          requiresAuth: true,
+        },
+      },
+      {
         path: "/dashboard",
         name: "Dashboard",
-        component: "@/pages/Dashboard/Index", // 预留首页路径
+        component: "@/pages/Dashboard/Index",
         meta: {
           title: "控制台",
           requiresAuth: true,
@@ -95,3 +110,51 @@ export const appRoutes: AppRouteRecord[] = [
     },
   },
 ];
+
+/**
+ * 组件懒加载映射表
+ * 将路由表中的 component 字段映射到具体的组件（按需导入）
+ */
+// 懒加载组件映射表
+const componentMap: Record<
+  string,
+  LazyExoticComponent<ComponentType<object>>
+> = {
+  "@/pages/Login/Login": lazy(() => import("@/pages/Login/Login")),
+  "@/pages/layouts/BasicLayout": lazy(
+    () => import("@/pages/layouts/BasicLayout")
+  ),
+  "@/pages/Dashboard/Index": lazy(() => import("@/pages/Dashboard/Index")),
+  "@/pages/Orders/Index": lazy(() => import("@/pages/Orders/Index")),
+  "@/pages/Products/Index": lazy(() => import("@/pages/Products/Index")),
+  "@/pages/Users/Index": lazy(() => import("@/pages/Users/Index")),
+  "@/pages/Exception/NotFound": lazy(
+    () => import("@/pages/Exception/NotFound")
+  ),
+};
+
+/** 将规则表转换为 react-router 路由对象 */
+const mapRoutesToObjects = (routes: AppRouteRecord[]): RouteObject[] =>
+  routes.map((route) => {
+    const Comp = componentMap[route.component];
+
+    const elementNode = Comp
+      ? React.createElement(
+          Suspense,
+          { fallback: null },
+          React.createElement(Comp, null)
+        )
+      : React.createElement("div", null, `组件未找到：${route.component}`);
+
+    return {
+      path: route.path,
+      element: elementNode,
+      children: route.children ? mapRoutesToObjects(route.children) : undefined,
+    };
+  });
+
+/** 生成给 App 使用的路由组件 */
+export function AppRouter() {
+  const routeObjects = mapRoutesToObjects(appRoutes);
+  return useRoutes(routeObjects);
+}

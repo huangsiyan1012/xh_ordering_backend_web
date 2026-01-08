@@ -7,15 +7,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 24px; // 略小的上下内边距，保证整体不超出视口
+  padding: 36px 36px; // 等比例放大1.5倍：24px → 36px
   overflow: hidden;
 }
 
 .login-card {
-  width: 1040px;
+  width: 1560px; // 等比例放大1.5倍：1040px → 1560px
   max-width: 100%;
   background: #fff;
-  box-shadow: 0 12px 40px rgba(247, 97, 83, 0.12);
+  box-shadow: 0 18px 60px rgba(247, 97, 83, 0.12); // 等比例放大1.5倍
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   overflow: hidden;
@@ -24,21 +24,21 @@
 .login-illustration {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px; // 等比例放大1.5倍：16px → 24px
   position: relative;
 }
 
 .illu-tag {
-  font-size: 14px;
+  font-size: 21px; // 等比例放大1.5倍：14px → 21px
   color: #666;
-  margin-bottom: 4px;
+  margin-bottom: 6px; // 等比例放大1.5倍：4px → 6px
 }
 
 .illu-panel {
   background: #fff7f3;
   border: 1px solid rgba(247, 97, 83, 0.08);
   border-radius: 0;
-  min-height: 360px;
+  min-height: 540px; // 等比例放大1.5倍：360px → 540px
   position: relative;
   overflow: hidden;
   padding: 0;
@@ -56,18 +56,18 @@
 
 .illu-overlay {
   position: absolute;
-  bottom: 48px;
+  bottom: 72px; // 等比例放大1.5倍：48px → 72px
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 18px; // 等比例放大1.5倍：12px → 18px
 }
 
 .illu-text {
   color: #fff;
-  font-size: 14px;
+  font-size: 24px; // 等比例放大1.5倍：16px → 24px
 }
 
 .illu-btn {
@@ -75,9 +75,10 @@
   color: #f76153;
   border: none;
   border-radius: 999px;
-  padding: 0 28px;
-  height: 26px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 0 48px; // 等比例放大1.5倍：32px → 48px
+  height: 48px; // 等比例放大1.5倍：32px → 48px
+  font-size: 24px; // 等比例放大1.5倍：16px → 24px
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.08); // 等比例放大1.5倍
 
   &:hover {
     background: #fff;
@@ -86,67 +87,225 @@
 }
 
 .login-form {
-  padding: 10px 48px 50px;
+  padding: 60px 72px 75px; // 等比例放大1.5倍，顶部增加空间给logo
   display: flex;
   flex-direction: column;
-  gap: 50px; // 增大垂直间距
-  justify-content: center; // 垂直居中卡片内容
+  gap: 48px; // Logo区域和表单之间的间距
+  justify-content: flex-start; // 从顶部开始
 }
 
-.login-header .logo {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #f76153 0%, #fcaea2 100%);
+// Logo区域
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px; // Logo和品牌名称之间的间距
+  margin-bottom: 0;
+}
+
+.logo-circle {
+  width: 120px; // 圆形logo大小
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(247, 97, 83, 0.25);
+}
+
+.logo-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 600;
+  line-height: 1.2;
 }
 
-.brand {
-  margin: 0 !important;
+.logo-text-top {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-.welcome {
-  margin: 0 !important;
-  font-size: 22px;
+.logo-divider {
+  font-size: 20px;
   font-weight: 600;
+  margin: 2px 0;
+}
+
+.logo-text-bottom {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.brand-name {
+  font-size: 30px;
+  font-weight: 600;
+  color: #2e2e2e;
+  letter-spacing: 1px;
 }
 
 .form-body {
   width: 100%;
 }
 
-.form-item .label {
-  display: block;
-  margin-bottom: 6px;
-  color: #2e2e2e;
-  font-size: 13px;
+.form-item {
+  width: 100%;
+  
+  .label {
+    display: block;
+    margin-bottom: 15px; // 标签和输入框之间的间距
+    color: #2e2e2e;
+    font-size: 22.5px; // 等比例放大1.5倍：15px → 22.5px
+    font-weight: 500;
+  }
 }
 
 // 输入框之间的间距
 .form-item + .form-item {
-  margin-top: 20px;
+  margin-top: 36px; // 等比例放大1.5倍，增加间距
 }
 
-.label-row {
-  width: 100%;
+
+// 自定义输入框样式
+.custom-input {
+  height: 66px; // 与主题配置一致
+  
+  .ant-input,
+  .ant-input-password {
+    font-size: 22.5px; // 输入框文字大小
+    height: 66px;
+    padding: 0 20px 0 60px; // 增加内边距，左侧为图标留空间
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s;
+    
+    &:hover {
+      border-color: $primary-light;
+    }
+    
+    &:focus,
+    &.ant-input-focused {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(247, 97, 83, 0.1);
+    }
+    
+    &::placeholder {
+      color: #999;
+      font-size: 22.5px;
+    }
+  }
+  
+  .input-icon {
+    font-size: 24px; // 图标大小
+    color: #999;
+  }
+  
+  .ant-input-prefix {
+    left: 20px; // 图标位置
+    width: auto;
+    
+    .input-icon {
+      color: #999;
+    }
+  }
+  
+  // 密码框的特殊处理
+  .ant-input-password-icon {
+    font-size: 24px;
+    color: #999;
+    margin-right: 15px;
+    
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+// 记住密码和忘记密码选项
+.form-options {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  margin-top: -18px; // 向上调整一点间距，与密码框更近
+  margin-bottom: 6px;
+  width: 100%;
+  
+  .remember-checkbox {
+    .ant-checkbox {
+      .ant-checkbox-inner {
+        width: 24px; // 等比例放大1.5倍：16px → 24px
+        height: 24px; // 等比例放大1.5倍：16px → 24px
+        border-radius: 6px;
+        border-color: #d9d9d9;
+        
+        &::after {
+          width: 8px; // 等比例放大1.5倍
+          height: 14px; // 等比例放大1.5倍
+        }
+      }
+      
+      &.ant-checkbox-checked .ant-checkbox-inner {
+        background-color: $primary-color;
+        border-color: $primary-color;
+      }
+      
+      &:hover .ant-checkbox-inner {
+        border-color: $primary-color;
+      }
+    }
+    
+    .ant-checkbox + span {
+      padding-left: 12px; // 复选框和文字之间的间距
+    }
+  }
+  
+  .remember-text {
+    font-size: 21px; // 等比例放大1.5倍：14px → 21px
+    color: #666;
+    user-select: none;
+  }
+  
+  .forgot-link {
+    font-size: 21px; // 等比例放大1.5倍：14px → 21px
+    color: $primary-color;
+    
+    &:hover {
+      color: $primary-dark;
+    }
+  }
 }
 
 .submit-btn {
-  height: 44px;
+  height: 72px; // 等比例放大1.5倍：48px → 72px
+  font-size: 24px; // 等比例放大1.5倍：16px → 24px
   font-weight: 600;
-  background: #f76153;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
   border: none;
-  margin-top: 12px; // 与上方输入框拉开距离
+  border-radius: 12px;
+  margin-top: 24px; // 增加与上方选项的间距
+  box-shadow: 0 6px 20px rgba(247, 97, 83, 0.3);
+  transition: all 0.3s;
+  
+  &:hover {
+    background: linear-gradient(135deg, $primary-light 0%, $primary-dark 100%);
+    box-shadow: 0 8px 24px rgba(247, 97, 83, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .divider {
   text-align: center;
   color: #8c8c8c;
-  font-size: 13px;
-  margin-top: 8px;
+  font-size: 19.5px; // 等比例放大1.5倍：13px → 19.5px
+  margin-top: 12px; // 等比例放大1.5倍：8px → 12px
 }
 
 @media (max-width: 960px) {

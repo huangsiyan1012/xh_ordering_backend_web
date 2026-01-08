@@ -27,61 +27,63 @@ export const themeConfig: ThemeConfig = {
     colorBorder: '#F2D6D1',
     colorBorderSecondary: '#F7E4DF',
     
-    // 圆角
-    borderRadius: 8,
-    borderRadiusLG: 12,
-    borderRadiusSM: 6,
+    // 圆角 - 等比例放大1.5倍
+    borderRadius: 12,
+    borderRadiusLG: 18,
+    borderRadiusSM: 9,
     
-    // 阴影
-    boxShadow: '0 2px 8px rgba(247, 97, 83, 0.12)',
-    boxShadowSecondary: '0 4px 12px rgba(247, 97, 83, 0.18)',
+    // 阴影 - 等比例放大1.5倍
+    boxShadow: '0 3px 12px rgba(247, 97, 83, 0.12)',
+    boxShadowSecondary: '0 6px 18px rgba(247, 97, 83, 0.18)',
     
-    // 字体（与全局 body 一致）
+    // 字体（与全局 body 一致）- 等比例放大1.5倍
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    fontSize: 14,
-    fontSizeLG: 16,
-    fontSizeSM: 12,
+    fontSize: 24,
+    fontSizeLG: 27,
+    fontSizeSM: 21,
     
-    // 间距
-    padding: 16,
-    paddingLG: 24,
-    paddingSM: 12,
-    paddingXS: 8,
+    // 间距 - 等比例放大1.5倍
+    padding: 24,
+    paddingLG: 36,
+    paddingSM: 18,
+    paddingXS: 12,
     
     // 行高
     lineHeight: 1.5715,
   },
   components: {
-    // Button 组件定制
+    // Button 组件定制 - 等比例放大1.5倍
     Button: {
       primaryColor: '#FFFFFF',
-      borderRadius: 8,
-      controlHeight: 36,
+      borderRadius: 12,
+      controlHeight: 66,
       fontWeight: 500,
+      fontSize: 24,
     },
-    // Input 组件定制
+    // Input 组件定制 - 等比例放大1.5倍
     Input: {
-      borderRadius: 8,
-      controlHeight: 36,
+      borderRadius: 12,
+      controlHeight: 66,
       colorBgContainer: '#FFFFFF',
       activeBorderColor: '#F76153', // 主色边框
       hoverBorderColor: '#FCAEA2', // 浅色悬停
+      fontSize: 24,
     },
-    // Card 组件定制
+    // Card 组件定制 - 等比例放大1.5倍
     Card: {
-      borderRadius: 12,
+      borderRadius: 18,
       colorBgContainer: '#FFFFFF',
-      boxShadow: '0 2px 8px rgba(247, 97, 83, 0.10)',
+      boxShadow: '0 3px 12px rgba(247, 97, 83, 0.10)',
     },
-    // Menu 组件定制
+    // Menu 组件定制 - 等比例放大1.5倍
     Menu: {
       itemBg: 'transparent',
       itemHoverBg: '#FFE7E3', // 浅粉悬停
       itemActiveBg: '#FCAEA2', // 浅色激活
       itemSelectedBg: '#FFE7E3', // 选中背景
       itemSelectedColor: '#E84F43', // 深一些的选中字
-      borderRadius: 8,
+      borderRadius: 12,
     },
     // Layout 组件定制
     Layout: {
@@ -90,27 +92,29 @@ export const themeConfig: ThemeConfig = {
       siderBg: '#FFFFFF',
       triggerBg: '#F7F7F7',
     },
-    // Table 组件定制
+    // Table 组件定制 - 等比例放大1.5倍
     Table: {
-      borderRadius: 8,
+      borderRadius: 12,
       headerBg: '#FFF3EE', // 极浅粉表头
       headerColor: '#2E2E2E',
       rowHoverBg: '#FFE7E3', // 浅粉悬停
     },
-    // Form 组件定制
+    // Form 组件定制 - 等比例放大1.5倍
     Form: {
       labelColor: '#2E2E2E',
-      itemMarginBottom: 20,
+      itemMarginBottom: 30,
     },
-    // Select 组件定制
+    // Select 组件定制 - 等比例放大1.5倍
     Select: {
-      borderRadius: 8,
-      controlHeight: 36,
+      borderRadius: 12,
+      controlHeight: 66,
+      fontSize: 24,
     },
-    // DatePicker 组件定制
+    // DatePicker 组件定制 - 等比例放大1.5倍
     DatePicker: {
-      borderRadius: 8,
-      controlHeight: 36,
+      borderRadius: 12,
+      controlHeight: 66,
+      fontSize: 24,
     },
   },
 };

@@ -1,12 +1,15 @@
-import { ConfigProvider } from "antd";
 import { themeConfig } from "@/config/theme";
-import Login from "@/pages/Login/Login";
+import { AppRouter } from "@/router";
+import { ConfigProvider } from "antd";
+import { Suspense } from "react";
 
 function App() {
   return (
     <ConfigProvider theme={themeConfig}>
       <div style={{ minHeight: "100vh", backgroundColor: "#F5F5F5" }}>
-        <Login />
+        <Suspense fallback={<div>正在拼命加载中...</div>}>
+          <AppRouter />
+        </Suspense>
       </div>
     </ConfigProvider>
   );
