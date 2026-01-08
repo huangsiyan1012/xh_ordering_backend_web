@@ -1,0 +1,264 @@
+@use "@/assets/style/global.scss" as *;
+
+.users-page {
+  background: #ffffff;
+  padding: 30px; // 等比例放大1.5倍：20px → 30px
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.users-search {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+
+  .ant-form-inline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    width: 200px;
+    height: 44px; // 输入框整体高一点
+    font-size: 18px; // 输入文字更大一点
+    border-radius: 5px; // 与分页选择器统一圆角
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  // 允许 clear / 前后缀图标时，antd 会包一层 affix-wrapper，这里一起控制圆角
+  .ant-input-affix-wrapper.search-input {
+    border-radius: 5px;
+  }
+
+  .search-btn {
+    height: 44px;
+    padding: 0 24px;
+    font-size: 16px;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    border-radius: 5px; 
+    background-image: none; // 去掉渐变，使用纯色
+
+    &:hover {
+      background-color: $primary-dark;
+      border-color: $primary-dark;
+    }
+  }
+
+  .reset-btn {
+    height: 44px;
+    padding: 0 24px;
+    font-size: 16px;
+    border-radius: 5px; 
+  }
+}
+
+.users-table {
+  .ant-table {
+    font-size: 16px;
+
+    .ant-table-thead > tr > th {
+      background-color: #fafafa;
+      font-weight: 600;
+      color: #333;
+      padding: 16px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .ant-table-tbody > tr > td {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background-color: #fafafa;
+    }
+
+    .ant-avatar {
+      font-size: 18px;
+    }
+
+    .ant-tag {
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      .edit-btn,
+      .delete-btn {
+        padding: 0;
+        height: auto;
+        font-size: 14px;
+      }
+
+      .edit-btn {
+        color: $primary-color;
+
+        &:hover {
+          color: $primary-dark;
+        }
+      }
+    }
+
+    .ant-switch {
+      width: 36px !important;
+      min-width: 36px !important;
+      height: 22px !important;
+      line-height: 20px !important;
+      border-radius: 11px !important; // 高度的一半，确保圆角
+
+      .ant-switch-handle {
+        width: 18px !important;
+        height: 18px !important;
+        top: 2px !important; // (22 - 18) / 2 = 2px，垂直居中
+      }
+
+      &.ant-switch-checked {
+        background-color: $primary-color !important;
+
+        .ant-switch-handle {
+          left: calc(100% - 20px) !important; // 36px - 18px - 2px = 16px，但用 calc 更准确
+        }
+      }
+
+      &:not(.ant-switch-checked) {
+        .ant-switch-handle {
+          left: 2px !important; // 左边留 2px 间距
+        }
+      }
+    }
+  }
+
+  .ant-pagination {
+    margin-top: 24px;
+    text-align: right;
+
+    .ant-pagination-total-text {
+      font-size: 16px;
+      color: #666;
+      margin-right: 16px;
+    }
+
+    .ant-pagination-item,
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      height: 32px;
+      line-height: 30px;
+      font-size: 16px;
+      min-width: 32px;
+    }
+
+    .ant-pagination-item-active {
+      background-color: $primary-color;
+      border-color: $primary-color;
+
+      a {
+        color: #fff;
+      }
+    }
+
+    .ant-pagination-item:hover:not(.ant-pagination-item-active) {
+      border-color: $primary-color;
+
+      a {
+        color: $primary-color;
+      }
+    }
+
+    .ant-pagination-prev:hover,
+    .ant-pagination-next:hover {
+      border-color: $primary-color;
+
+      .ant-pagination-item-link {
+        color: $primary-color;
+      }
+    }
+
+    .ant-pagination-options {
+      // 外层 size-changer 容器整体压扁一点，并垂直居中
+      .ant-pagination-options-size-changer {
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        font-size: 16px !important; // 直接作用在外层 ant-select
+        border-radius: 5px !important;
+      }
+
+      // 这里主要用于结构控制，具体字号/圆角用下面带 !important 的规则兜底
+      .ant-select-selector {
+        height: 28px; // 选择框本身高度
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        border-color: #d9d9d9;
+      }
+
+      // 选择器内部文字和输入高度统一
+      .ant-select-single .ant-select-selector .ant-select-selection-item {
+        line-height: 26px;
+        font-size: 12px;
+      }
+
+      .ant-select-single .ant-select-selector .ant-select-selection-search-input {
+        height: 26px;
+        line-height: 26px;
+      }
+
+      // 提高特异性并使用 !important 覆盖 antd 默认样式
+      .ant-pagination-options-size-changer.ant-select-single
+        .ant-select-selector
+        .ant-select-selection-item {
+        font-size: 16px !important;
+        line-height: 26px !important;
+      }
+
+      .ant-pagination-options-size-changer.ant-select-single
+        .ant-select-selector
+        .ant-select-selection-search-input {
+        font-size: 16px !important;
+        height: 26px !important;
+        line-height: 26px !important;
+      }
+
+      // 强制控制选择框本身的圆角和字号（覆盖 antd 组件自带效果）
+      .ant-pagination-options-size-changer.ant-select
+        .ant-select-selector {
+        border-radius: 5px !important;
+        font-size: 12px !important;
+      }
+
+      .ant-pagination-options-quick-jumper {
+        font-size: 16px;
+
+        input {
+          height: 32px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// 全局收窄所有 Select 下拉项的字号（分页 size changer 的下拉也一起受影响）
+.ant-select-dropdown {
+  .ant-select-item {
+    font-size: 16px !important;
+    padding: 6px 12px !important;
+    height: auto !important;
+    min-height: auto !important;
+    line-height: 1.5 !important;
+    width: auto !important;
+  }
+}
+

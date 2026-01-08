@@ -154,7 +154,7 @@
 
 .form-item {
   width: 100%;
-  
+
   .label {
     display: block;
     margin-bottom: 15px; // 标签和输入框之间的间距
@@ -169,11 +169,10 @@
   margin-top: 36px; // 等比例放大1.5倍，增加间距
 }
 
-
 // 自定义输入框样式
 .custom-input {
   height: 66px; // 与主题配置一致
-  
+
   .ant-input,
   .ant-input-password {
     font-size: 22.5px; // 输入框文字大小
@@ -182,43 +181,43 @@
     border-radius: 12px;
     border: 1px solid #e0e0e0;
     transition: all 0.3s;
-    
+
     &:hover {
       border-color: $primary-light;
     }
-    
+
     &:focus,
     &.ant-input-focused {
       border-color: $primary-color;
       box-shadow: 0 0 0 3px rgba(247, 97, 83, 0.1);
     }
-    
+
     &::placeholder {
       color: #999;
       font-size: 22.5px;
     }
   }
-  
+
   .input-icon {
     font-size: 24px; // 图标大小
     color: #999;
   }
-  
+
   .ant-input-prefix {
     left: 20px; // 图标位置
     width: auto;
-    
+
     .input-icon {
       color: #999;
     }
   }
-  
+
   // 密码框的特殊处理
   .ant-input-password-icon {
     font-size: 24px;
     color: #999;
     margin-right: 15px;
-    
+
     &:hover {
       color: $primary-color;
     }
@@ -230,10 +229,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: -18px; // 向上调整一点间距，与密码框更近
   margin-bottom: 6px;
   width: 100%;
-  
+
   .remember-checkbox {
     .ant-checkbox {
       .ant-checkbox-inner {
@@ -241,38 +239,38 @@
         height: 24px; // 等比例放大1.5倍：16px → 24px
         border-radius: 6px;
         border-color: #d9d9d9;
-        
+
         &::after {
           width: 8px; // 等比例放大1.5倍
           height: 14px; // 等比例放大1.5倍
         }
       }
-      
+
       &.ant-checkbox-checked .ant-checkbox-inner {
         background-color: $primary-color;
         border-color: $primary-color;
       }
-      
+
       &:hover .ant-checkbox-inner {
         border-color: $primary-color;
       }
     }
-    
+
     .ant-checkbox + span {
       padding-left: 12px; // 复选框和文字之间的间距
     }
   }
-  
+
   .remember-text {
     font-size: 21px; // 等比例放大1.5倍：14px → 21px
     color: #666;
     user-select: none;
   }
-  
+
   .forgot-link {
     font-size: 21px; // 等比例放大1.5倍：14px → 21px
     color: $primary-color;
-    
+
     &:hover {
       color: $primary-dark;
     }
@@ -289,13 +287,13 @@
   margin-top: 24px; // 增加与上方选项的间距
   box-shadow: 0 6px 20px rgba(247, 97, 83, 0.3);
   transition: all 0.3s;
-  
+
   &:hover {
     background: linear-gradient(135deg, $primary-light 0%, $primary-dark 100%);
     box-shadow: 0 8px 24px rgba(247, 97, 83, 0.4);
     transform: translateY(-2px);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
