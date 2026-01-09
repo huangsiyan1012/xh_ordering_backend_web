@@ -98,6 +98,15 @@ export const appRoutes: AppRouteRecord[] = [
           requiresAuth: true,
         },
       },
+      {
+        path: "/categories",
+        name: "ProductCategory",
+        component: "@/pages/ProductCategory/Index",
+        meta: {
+          title: "菜品分类",
+          requiresAuth: true,
+        },
+      },
     ],
   },
   {
@@ -128,6 +137,9 @@ const componentMap: Record<
   "@/pages/Orders/Index": lazy(() => import("@/pages/Orders/Index")),
   "@/pages/Products/Index": lazy(() => import("@/pages/Products/Index")),
   "@/pages/Users/Index": lazy(() => import("@/pages/Users/Index")),
+  "@/pages/ProductCategory/Index": lazy(
+    () => import("@/pages/ProductCategory/Index")
+  ),
   "@/pages/Exception/NotFound": lazy(
     () => import("@/pages/Exception/NotFound")
   ),

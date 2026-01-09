@@ -1,11 +1,15 @@
-import type { CreateUserParams, UpdateUserParams, User } from "@/api/user";
+import type {
+  Category,
+  CreateCategoryParams,
+  UpdateCategoryParams,
+} from "@/api/category";
 import {
-  createUser,
-  deleteUser,
-  getUserList,
-  updateUser,
-  updateUserStatus,
-} from "@/api/user";
+  createCategory,
+  deleteCategory,
+  getCategoryList,
+  updateCategory,
+  updateCategoryStatus,
+} from "@/api/category";
 import Pagination from "@/components/Pagination";
 import {
   DeleteOutlined,
@@ -14,10 +18,10 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import {
-  Avatar,
   Button,
   Form,
   Input,
+  InputNumber,
   message,
   Modal,
   Switch,
@@ -25,17 +29,13 @@ import {
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import "./users.scss";
+import "./productCategory.scss";
 
-interface UserRecord extends User {
-  createdAt: string; // ISO 字符串
-}
-
-export default function Users() {
+export default function ProductCategory() {
   const [form] = Form.useForm();
-  const [userForm] = Form.useForm(); // 用户表单（新增/编辑）
+  const [categoryForm] = Form.useForm(); // 分类表单（新增/编辑）
   const [loading, setLoading] = useState(false);
-  const [dataSource, setDataSource] = useState<UserRecord[]>([]);
+  const [dataSource, setDataSource] = useState<Category[]>([]);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -45,17 +45,18 @@ export default function Users() {
   // 搜索条件
   const [searchParams, setSearchParams] = useState<{
     name?: string;
-    phone?: string;
   }>({});
 
   // 新增/编辑弹窗状态
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalTitle, setModalTitle] = useState("新增用户");
-  const [editingUserId, setEditingUserId] = useState<number | null>(null);
+  const [modalTitle, setModalTitle] = useState("新增分类");
+  const [editingCategoryId, setEditingCategoryId] = useState<number | null>(
+    null
+  );
 
-  // 加载用户列表数据
-  const loadUserList = async (
-    customParams?: { name?: string; phone?: string },
+  // 加载分类列表数据
+  const loadCategoryList = async (
+    customParams?: { name?: string },
     customPage?: number
   ) => {
     setLoading(true);
@@ -63,7 +64,7 @@ export default function Users() {
       // 使用传入的参数，如果没有则使用 state 中的值
       const params = customParams !== undefined ? customParams : searchParams;
       const page = customPage !== undefined ? customPage : pagination.current;
-      const res = await getUserList({
+      const res = await getCategoryList({
         page: page,
         pageSize: pagination.pageSize,
         ...params,
@@ -75,15 +76,15 @@ export default function Users() {
         total: res.total || 0,
       });
     } catch (error) {
-      console.error("加载用户列表失败:", error);
-      message.error("加载用户列表失败");
+      console.error("加载分类列表失败:", error);
+      message.error("加载分类列表失败");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadUserList();
+    loadCategoryList();
   }, [pagination.current, pagination.pageSize]);
 
   // 处理分页改变
@@ -108,86 +109,62 @@ export default function Users() {
     const values = form.getFieldsValue();
     const newSearchParams = {
       name: values.name?.trim() || undefined,
-      phone: values.phone?.trim() || undefined,
     };
     // 更新 state（用于其他地方可能需要用到）
     setSearchParams(newSearchParams);
     // 直接使用新的搜索参数和第一页加载数据，不依赖 state 更新
-    loadUserList(newSearchParams, 1);
+    loadCategoryList(newSearchParams, 1);
   };
 
-  // 处理新增用户
+  // 处理新增分类
   const handleAdd = () => {
-    setModalTitle("新增用户");
-    setEditingUserId(null);
-    userForm.resetFields();
-    userForm.setFieldsValue({ status: 1 }); // 默认启用
+    setModalTitle("新增分类");
+    setEditingCategoryId(null);
+    categoryForm.resetFields();
+    categoryForm.setFieldsValue({ status: 1, sort: 0 }); // 默认上架，排序为0
     setModalVisible(true);
   };
 
-  // 处理禁用/启用用户
-  const handleStatusChange = async (userId: number, checked: boolean) => {
-    try {
-      await updateUserStatus(userId, checked ? 1 : 0);
-      // 更新本地数据
-      setDataSource((prev) =>
-        prev.map((item) =>
-          item.id === userId ? { ...item, status: checked ? 1 : 0 } : item
-        )
-      );
-      message.success(checked ? "用户已启用" : "用户已禁用");
-    } catch (error) {
-      console.error("更新用户状态失败:", error);
-      message.error("更新用户状态失败");
-    }
-  };
-
-  // 处理编辑用户
-  const handleEdit = (record: UserRecord) => {
-    setModalTitle("编辑用户");
-    setEditingUserId(record.id);
-    userForm.setFieldsValue({
+  // 处理编辑分类
+  const handleEdit = (record: Category) => {
+    setModalTitle("编辑分类");
+    setEditingCategoryId(record.id);
+    categoryForm.setFieldsValue({
       name: record.name,
-      phone: record.phone,
+      sort: record.sort,
       status: record.status,
-      password: "", // 编辑时密码为空，不填写则不更新
     });
     setModalVisible(true);
   };
 
   // 处理表单提交（新增/编辑）
-  const handleUserFormSubmit = async () => {
+  const handleCategoryFormSubmit = async () => {
     try {
-      const values = await userForm.validateFields();
+      const values = await categoryForm.validateFields();
 
-      if (editingUserId) {
-        // 编辑用户
-        const updateParams: UpdateUserParams = {
+      if (editingCategoryId) {
+        // 编辑分类
+        const updateParams: UpdateCategoryParams = {
           name: values.name,
-          phone: values.phone,
+          sort: values.sort,
           status: values.status,
         };
-        // 只有填写了密码才更新
-        if (values.password && values.password.trim()) {
-          updateParams.password = values.password;
-        }
-        await updateUser(editingUserId, updateParams);
-        message.success("用户更新成功");
+        await updateCategory(editingCategoryId, updateParams);
+        message.success("分类更新成功");
       } else {
-        // 新增用户
-        const createParams: CreateUserParams = {
+        // 新增分类
+        const createParams: CreateCategoryParams = {
           name: values.name,
-          phone: values.phone,
-          password: values.password,
+          sort: values.sort ?? 0,
           status: values.status ?? 1,
         };
-        await createUser(createParams);
-        message.success("用户创建成功");
+        await createCategory(createParams);
+        message.success("分类创建成功");
       }
 
       setModalVisible(false);
-      userForm.resetFields();
-      await loadUserList();
+      categoryForm.resetFields();
+      await loadCategoryList();
     } catch (error: any) {
       if (error?.errorFields) {
         // 表单验证错误
@@ -198,63 +175,58 @@ export default function Users() {
     }
   };
 
-  // 处理删除用户
-  const handleDelete = (record: UserRecord) => {
+  // 处理删除分类
+  const handleDelete = (record: Category) => {
     Modal.confirm({
       title: "确认删除",
-      content: `确定要删除用户 "${record.name}" 吗？此操作不可恢复。`,
+      content: `确定要删除分类 "${record.name}" 吗？此操作不可恢复。`,
       okText: "确定",
       okType: "danger",
       cancelText: "取消",
       onOk: async () => {
         try {
-          await deleteUser(record.id);
+          await deleteCategory(record.id);
           // 重新加载列表
-          await loadUserList();
-          message.success("用户已删除");
+          await loadCategoryList();
+          message.success("分类已删除");
         } catch (error) {
-          console.error("删除用户失败:", error);
-          message.error("删除用户失败");
+          console.error("删除分类失败:", error);
+          message.error("删除分类失败");
         }
       },
     });
   };
 
-  const columns: ColumnsType<UserRecord> = [
+  // 处理上架/下架
+  const handleStatusChange = async (categoryId: number, checked: boolean) => {
+    try {
+      await updateCategoryStatus(categoryId, checked ? 1 : 0);
+      // 更新本地数据
+      setDataSource((prev) =>
+        prev.map((item) =>
+          item.id === categoryId ? { ...item, status: checked ? 1 : 0 } : item
+        )
+      );
+      message.success(checked ? "分类已上架" : "分类已下架");
+    } catch (error) {
+      console.error("更新分类状态失败:", error);
+      message.error("更新分类状态失败");
+    }
+  };
+
+  const columns: ColumnsType<Category> = [
     {
-      title: "头像",
-      dataIndex: "avatar",
-      key: "avatar",
-      width: 120,
-      align: "center",
-      render: (_: unknown, record: UserRecord) => {
-        const firstChar = record.name?.[0] || "?";
-        return (
-          <Avatar style={{ backgroundColor: "#F76153" }} size={40}>
-            {firstChar}
-          </Avatar>
-        );
-      },
-    },
-    {
-      title: "姓名",
+      title: "分类名称",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "手机号",
-      dataIndex: "phone",
-      key: "phone",
-      width: 200,
-      align: "center",
-    },
-    {
-      title: "禁用/启用",
+      title: "上架/下架",
       dataIndex: "status",
       key: "status",
       width: 150,
       align: "center",
-      render: (value: number, record: UserRecord) => (
+      render: (value: number, record: Category) => (
         <Switch
           checked={value === 1}
           onChange={(checked) => handleStatusChange(record.id, checked)}
@@ -262,21 +234,11 @@ export default function Users() {
       ),
     },
     {
-      title: "创建时间",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: 250,
-      align: "center",
-      sorter: (a: UserRecord, b: UserRecord) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      defaultSortOrder: null,
-    },
-    {
       title: "操作",
       key: "action",
       width: 180,
       align: "center",
-      render: (_: unknown, record: UserRecord) => (
+      render: (_: unknown, record: Category) => (
         <div className="action-buttons">
           <Button
             type="link"
@@ -301,21 +263,14 @@ export default function Users() {
   ];
 
   return (
-    <div className="users-page">
+    <div className="product-category-page">
       {/* 搜索区域 */}
-      <div className="users-search">
+      <div className="product-category-search">
         <Form form={form} layout="inline" onFinish={handleSearch}>
           <Form.Item name="name" style={{ marginBottom: 0 }}>
             <Input
               allowClear
-              placeholder="请输入姓名"
-              className="search-input"
-            />
-          </Form.Item>
-          <Form.Item name="phone" style={{ marginBottom: 0 }}>
-            <Input
-              allowClear
-              placeholder="请输入手机号"
+              placeholder="请输入分类名称"
               className="search-input"
             />
           </Form.Item>
@@ -341,8 +296,8 @@ export default function Users() {
       </div>
 
       {/* 表格区域 */}
-      <div className="users-table">
-        <Table<UserRecord>
+      <div className="product-category-table">
+        <Table<Category>
           rowKey="id"
           columns={columns}
           dataSource={dataSource}
@@ -352,7 +307,7 @@ export default function Users() {
       </div>
 
       {/* 自定义分页组件 */}
-      <div className="users-pagination">
+      <div className="product-category-pagination">
         <Pagination
           current={pagination.current}
           pageSize={pagination.pageSize}
@@ -365,63 +320,44 @@ export default function Users() {
         />
       </div>
 
-      {/* 新增/编辑用户弹窗 */}
+      {/* 新增/编辑分类弹窗 */}
       <Modal
         title={modalTitle}
         open={modalVisible}
-        onOk={handleUserFormSubmit}
+        onOk={handleCategoryFormSubmit}
         onCancel={() => {
           setModalVisible(false);
-          userForm.resetFields();
+          categoryForm.resetFields();
         }}
         okText="确定"
         cancelText="取消"
         width={500}
       >
-        <Form form={userForm} layout="vertical" initialValues={{ status: 1 }}>
+        <Form
+          form={categoryForm}
+          layout="vertical"
+          initialValues={{ status: 1, sort: 0 }}
+        >
           <Form.Item
             name="name"
-            label="姓名"
+            label="分类名称"
             rules={[
-              { required: true, message: "请输入姓名" },
-              { max: 50, message: "姓名不能超过50个字符" },
+              { required: true, message: "请输入分类名称" },
+              { max: 50, message: "分类名称不能超过50个字符" },
             ]}
           >
-            <Input placeholder="请输入姓名" />
+            <Input placeholder="请输入分类名称" />
           </Form.Item>
           <Form.Item
-            name="phone"
-            label="手机号"
-            rules={[
-              { required: true, message: "请输入手机号" },
-              {
-                pattern: /^1[3-9]\d{9}$/,
-                message: "请输入正确的手机号",
-              },
-            ]}
+            name="sort"
+            label="排序"
+            rules={[{ required: true, message: "请输入排序值" }]}
           >
-            <Input placeholder="请输入手机号" maxLength={11} />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="密码"
-            rules={[
-              {
-                required: !editingUserId,
-                message: "请输入密码",
-              },
-              {
-                min: 6,
-                message: "密码至少6位",
-              },
-              {
-                max: 20,
-                message: "密码不能超过20位",
-              },
-            ]}
-            extra={editingUserId ? "留空则不修改密码" : ""}
-          >
-            <Input.Password placeholder="请输入密码" />
+            <InputNumber
+              placeholder="请输入排序值"
+              min={0}
+              style={{ width: "100%" }}
+            />
           </Form.Item>
           <Form.Item
             name="status"
@@ -431,7 +367,7 @@ export default function Users() {
             getValueFromEvent={(checked) => (checked ? 1 : 0)}
             getValueProps={(value) => ({ checked: value === 1 })}
           >
-            <Switch checkedChildren="启用" unCheckedChildren="禁用" />
+            <Switch checkedChildren="上架" unCheckedChildren="下架" />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,0 +1,183 @@
+@use "@/assets/style/global.scss" as *;
+
+.products-page {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.products-search {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+
+  .ant-form-inline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    width: 200px;
+    height: 44px;
+    font-size: 18px;
+    border-radius: 5px;
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .ant-input-affix-wrapper.search-input {
+    border-radius: 5px;
+  }
+
+  .search-select {
+    height: 44px;
+    font-size: 18px;
+    border-radius: 5px;
+
+    .ant-select-selector {
+      height: 44px !important;
+      border-radius: 5px !important;
+
+      .ant-select-selection-item {
+        line-height: 42px !important;
+        font-size: 18px !important;
+      }
+
+      .ant-select-selection-search-input {
+        height: 42px !important;
+        line-height: 42px !important;
+        font-size: 18px !important;
+      }
+    }
+  }
+}
+
+.search-btn {
+  height: 44px;
+  padding: 0 24px;
+  font-size: 16px;
+  background-color: $primary-color;
+  border-color: $primary-color;
+  border-radius: 5px;
+  background-image: none !important;
+
+  &:hover {
+    background-color: $primary-dark;
+    border-color: $primary-dark;
+    background-image: none !important;
+  }
+
+  &:focus {
+    background-image: none !important;
+  }
+}
+
+.reset-btn {
+  height: 44px;
+  padding: 0 24px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #ffffff !important;
+  border-color: $primary-color !important;
+  color: $primary-color !important;
+  background-image: none !important;
+
+  &:hover {
+    background-color: #f5f5f5 !important;
+    border-color: $primary-dark !important;
+    color: $primary-dark !important;
+    background-image: none !important;
+  }
+
+  &:focus {
+    background-image: none !important;
+  }
+}
+
+.products-table {
+  .ant-table {
+    font-size: 16px;
+
+    .ant-table-thead > tr > th {
+      background-color: #fafafa;
+      font-weight: 600;
+      color: #333;
+      padding: 16px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .ant-table-tbody > tr > td {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background-color: #fafafa;
+    }
+
+    .ant-image {
+      border-radius: 4px;
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      .edit-btn,
+      .delete-btn {
+        padding: 0;
+        height: auto;
+        font-size: 14px;
+      }
+
+      .edit-btn {
+        color: $primary-color;
+
+        &:hover {
+          color: $primary-dark;
+        }
+      }
+    }
+
+    .ant-switch {
+      width: 36px !important;
+      min-width: 36px !important;
+      height: 22px !important;
+      line-height: 20px !important;
+      border-radius: 11px !important;
+
+      .ant-switch-handle {
+        width: 18px !important;
+        height: 18px !important;
+        top: 2px !important;
+      }
+
+      &.ant-switch-checked {
+        background-color: $primary-color !important;
+
+        .ant-switch-handle {
+          left: calc(100% - 20px) !important;
+        }
+      }
+
+      &:not(.ant-switch-checked) {
+        .ant-switch-handle {
+          left: 2px !important;
+        }
+      }
+    }
+  }
+}
+
+.products-pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
