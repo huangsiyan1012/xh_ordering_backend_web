@@ -67,19 +67,28 @@ a {
   }
 }
 
-// 全局按钮样式增强
+// 全局按钮样式增强 - 去掉渐变，使用纯色
 .ant-btn-primary {
-  background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
-  border: none;
+  background-color: $primary-color !important;
+  background-image: none !important;
+  border-color: $primary-color !important;
   
   &:hover {
-    background: linear-gradient(135deg, $primary-light 0%, $primary-dark 100%);
-    box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
-    transform: translateY(-1px);
+    background-color: $primary-dark !important;
+    background-image: none !important;
+    border-color: $primary-dark !important;
+  }
+  
+  &:focus {
+    background-color: $primary-color !important;
+    background-image: none !important;
+    border-color: $primary-color !important;
   }
   
   &:active {
-    transform: translateY(0);
+    background-color: $primary-dark !important;
+    background-image: none !important;
+    border-color: $primary-dark !important;
   }
 }
 

@@ -1,0 +1,254 @@
+@use "@/assets/style/global.scss" as *;
+
+.custom-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+
+  // 总条数
+  .pagination-total {
+    margin-right: 8px;
+    color: #666;
+    font-size: 14px;
+    line-height: 32px;
+  }
+
+  // 每页条数选择器 - 自定义实现
+  .pagination-size-changer {
+    position: relative;
+
+    .size-select {
+      width: 90px;
+      height: 32px;
+      border-radius: 4px;
+      background-color: #ffffff;
+      border: 1px solid #d9d9d9;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+
+      .size-select-value {
+        font-size: 14px;
+        color: #333;
+        line-height: 32px;
+        flex: 1;
+      }
+
+      .size-select-arrow {
+        font-size: 14px;
+        color: #666;
+        transition: transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+
+        svg {
+          width: 14px;
+          height: 14px;
+          font-size: 14px;
+        }
+      }
+
+      &.open {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(247, 97, 83, 0.2);
+
+        .size-select-arrow {
+          transform: rotate(180deg);
+        }
+      }
+
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+
+    .size-select-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      background-color: #ffffff;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      min-width: 90px;
+      max-height: 200px;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      // 自定义滚动条样式 - 主色调
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f5f5f5;
+        border-radius: 3px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $primary-color;
+        border-radius: 3px;
+
+        &:hover {
+          background: $primary-dark;
+        }
+      }
+
+      .size-select-option {
+        padding: 4px 12px;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        line-height: 1.5;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: $primary-lighter;
+        }
+
+        &.selected {
+          background-color: $primary-lighter;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  // 上一页/下一页按钮
+  .pagination-prev,
+  .pagination-next {
+    width: 32px;
+    height: 32px;
+    padding: 0 !important;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    background-color: #ffffff;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #666;
+    background-image: none !important;
+    line-height: 1 !important;
+
+    .ant-btn-icon {
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .anticon {
+      font-size: 14px !important;
+      line-height: 1 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    &:hover:not(:disabled) {
+      border-color: $primary-color;
+      color: $primary-color;
+      background-color: #ffffff;
+      background-image: none !important;
+    }
+
+    &:focus {
+      border-color: $primary-color;
+      color: $primary-color;
+      background-image: none !important;
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      border-color: #d9d9d9;
+      color: #bfbfbf;
+      cursor: not-allowed;
+    }
+  }
+
+  // 当前页按钮
+  .pagination-current {
+    width: 32px;
+    height: 32px;
+    padding: 0 !important;
+    border-radius: 4px;
+    border: none;
+    background-color: $primary-color !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: default;
+    line-height: 1 !important;
+
+    span {
+      line-height: 1 !important;
+      font-size: 14px !important;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $primary-color !important;
+      background-image: none !important;
+      color: #ffffff !important;
+      border: none !important;
+    }
+  }
+
+  // 快速跳转
+  .pagination-jumper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+
+    .jumper-label {
+      color: #666;
+      font-size: 14px;
+      line-height: 32px;
+    }
+
+    .jumper-input {
+      width: 50px;
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid #d9d9d9;
+      text-align: center;
+      font-size: 14px;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(247, 97, 83, 0.2);
+      }
+
+      .ant-input {
+        text-align: center;
+        padding: 0;
+        font-size: 14px;
+        line-height: 32px;
+        height: 32px;
+      }
+    }
+  }
+}
+

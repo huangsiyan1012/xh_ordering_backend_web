@@ -1,9 +1,30 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, Form, Input, Table, Switch, message, Modal } from "antd";
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  Table,
+  Switch,
+  message,
+  Modal,
+} from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { SearchOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { getUserList, updateUserStatus, deleteUser } from "@/api/user";
-import type { User } from "@/api/user";
+import {
+  SearchOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import {
+  getUserList,
+  updateUserStatus,
+  deleteUser,
+  createUser,
+  updateUser,
+} from "@/api/user";
+import type { User, CreateUserParams, UpdateUserParams } from "@/api/user";
+import Pagination from "@/components/Pagination";
 import "./users.scss";
 
 interface UserRecord extends User {
@@ -12,6 +33,7 @@ interface UserRecord extends User {
 
 export default function Users() {
   const [form] = Form.useForm();
+  const [userForm] = Form.useForm(); // 用户表单（新增/编辑）
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState<UserRecord[]>([]);
   const [pagination, setPagination] = useState({
@@ -26,18 +48,30 @@ export default function Users() {
     phone?: string;
   }>({});
 
+  // 新增/编辑弹窗状态
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("新增用户");
+  const [editingUserId, setEditingUserId] = useState<number | null>(null);
+
   // 加载用户列表数据
-  const loadUserList = async () => {
+  const loadUserList = async (
+    customParams?: { name?: string; phone?: string },
+    customPage?: number
+  ) => {
     setLoading(true);
     try {
+      // 使用传入的参数，如果没有则使用 state 中的值
+      const params = customParams !== undefined ? customParams : searchParams;
+      const page = customPage !== undefined ? customPage : pagination.current;
       const res = await getUserList({
-        page: pagination.current,
+        page: page,
         pageSize: pagination.pageSize,
-        ...searchParams,
+        ...params,
       });
       setDataSource(res.list || []);
       setPagination({
-        ...pagination,
+        current: page,
+        pageSize: pagination.pageSize,
         total: res.total || 0,
       });
     } catch (error) {
@@ -52,35 +86,45 @@ export default function Users() {
     loadUserList();
   }, [pagination.current, pagination.pageSize]);
 
+  // 处理分页改变
+  const handlePaginationChange = (page: number, size: number) => {
+    setPagination({
+      current: page,
+      pageSize: size,
+      total: pagination.total,
+    });
+  };
+
+  // 处理每页条数改变
+  const handlePageSizeChange = (current: number, size: number) => {
+    setPagination({
+      current: current,
+      pageSize: size,
+      total: pagination.total,
+    });
+  };
+
   const handleSearch = () => {
     const values = form.getFieldsValue();
-    setSearchParams({
+    const newSearchParams = {
       name: values.name?.trim() || undefined,
       phone: values.phone?.trim() || undefined,
-    });
-    setPagination({ ...pagination, current: 1 });
-    // 重新加载数据
-    setTimeout(() => {
-      loadUserList();
-    }, 0);
+    };
+    // 更新 state（用于其他地方可能需要用到）
+    setSearchParams(newSearchParams);
+    // 直接使用新的搜索参数和第一页加载数据，不依赖 state 更新
+    loadUserList(newSearchParams, 1);
   };
 
-  const handleReset = () => {
-    form.resetFields();
-    setSearchParams({});
-    setPagination({ ...pagination, current: 1 });
-    setTimeout(() => {
-      loadUserList();
-    }, 0);
+  // 处理新增用户
+  const handleAdd = () => {
+    setModalTitle("新增用户");
+    setEditingUserId(null);
+    userForm.resetFields();
+    userForm.setFieldsValue({ status: 1 }); // 默认启用
+    setModalVisible(true);
   };
 
-  const handleTableChange = (newPagination: any) => {
-    setPagination({
-      ...pagination,
-      current: newPagination.current,
-      pageSize: newPagination.pageSize,
-    });
-  };
 
   // 处理禁用/启用用户
   const handleStatusChange = async (userId: number, checked: boolean) => {
@@ -101,9 +145,58 @@ export default function Users() {
 
   // 处理编辑用户
   const handleEdit = (record: UserRecord) => {
-    // TODO: 打开编辑弹窗或跳转到编辑页面
-    console.log("编辑用户:", record);
-    message.info("编辑功能待实现");
+    setModalTitle("编辑用户");
+    setEditingUserId(record.id);
+    userForm.setFieldsValue({
+      name: record.name,
+      phone: record.phone,
+      status: record.status,
+      password: "", // 编辑时密码为空，不填写则不更新
+    });
+    setModalVisible(true);
+  };
+
+  // 处理表单提交（新增/编辑）
+  const handleUserFormSubmit = async () => {
+    try {
+      const values = await userForm.validateFields();
+      
+      if (editingUserId) {
+        // 编辑用户
+        const updateParams: UpdateUserParams = {
+          name: values.name,
+          phone: values.phone,
+          status: values.status,
+        };
+        // 只有填写了密码才更新
+        if (values.password && values.password.trim()) {
+          updateParams.password = values.password;
+        }
+        await updateUser(editingUserId, updateParams);
+        message.success("用户更新成功");
+      } else {
+        // 新增用户
+        const createParams: CreateUserParams = {
+          name: values.name,
+          phone: values.phone,
+          password: values.password,
+          status: values.status ?? 1,
+        };
+        await createUser(createParams);
+        message.success("用户创建成功");
+      }
+      
+      setModalVisible(false);
+      userForm.resetFields();
+      await loadUserList();
+    } catch (error: any) {
+      if (error?.errorFields) {
+        // 表单验证错误
+        return;
+      }
+      console.error("操作失败:", error);
+      message.error(error?.message || "操作失败");
+    }
   };
 
   // 处理删除用户
@@ -236,11 +329,12 @@ export default function Users() {
               查询
             </Button>
             <Button
-              onClick={handleReset}
+              onClick={handleAdd}
+              icon={<PlusOutlined />}
               style={{ marginLeft: 12 }}
               className="reset-btn"
             >
-              重置
+              新增
             </Button>
           </Form.Item>
         </Form>
@@ -253,18 +347,98 @@ export default function Users() {
           columns={columns}
           dataSource={dataSource}
           loading={loading}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共${total}条`,
-            pageSizeOptions: ["10", "20", "50", "100"],
-          }}
-          onChange={handleTableChange}
+          pagination={false}
         />
       </div>
+
+      {/* 自定义分页组件 */}
+      <div className="users-pagination">
+        <Pagination
+          current={pagination.current}
+          pageSize={pagination.pageSize}
+          total={pagination.total}
+          pageSizeOptions={["10", "15", "20", "50", "100"]}
+          onChange={handlePaginationChange}
+          onPageSizeChange={handlePageSizeChange}
+          showQuickJumper={true}
+          showTotal={true}
+        />
+      </div>
+
+      {/* 新增/编辑用户弹窗 */}
+      <Modal
+        title={modalTitle}
+        open={modalVisible}
+        onOk={handleUserFormSubmit}
+        onCancel={() => {
+          setModalVisible(false);
+          userForm.resetFields();
+        }}
+        okText="确定"
+        cancelText="取消"
+        width={500}
+      >
+        <Form
+          form={userForm}
+          layout="vertical"
+          initialValues={{ status: 1 }}
+        >
+          <Form.Item
+            name="name"
+            label="姓名"
+            rules={[
+              { required: true, message: "请输入姓名" },
+              { max: 50, message: "姓名不能超过50个字符" },
+            ]}
+          >
+            <Input placeholder="请输入姓名" />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="手机号"
+            rules={[
+              { required: true, message: "请输入手机号" },
+              {
+                pattern: /^1[3-9]\d{9}$/,
+                message: "请输入正确的手机号",
+              },
+            ]}
+          >
+            <Input placeholder="请输入手机号" maxLength={11} />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="密码"
+            rules={[
+              {
+                required: !editingUserId,
+                message: "请输入密码",
+              },
+              {
+                min: 6,
+                message: "密码至少6位",
+              },
+              {
+                max: 20,
+                message: "密码不能超过20位",
+              },
+            ]}
+            extra={editingUserId ? "留空则不修改密码" : ""}
+          >
+            <Input.Password placeholder="请输入密码" />
+          </Form.Item>
+          <Form.Item
+            name="status"
+            label="状态"
+            rules={[{ required: true, message: "请选择状态" }]}
+            valuePropName="checked"
+            getValueFromEvent={(checked) => (checked ? 1 : 0)}
+            getValueProps={(value) => ({ checked: value === 1 })}
+          >
+            <Switch checkedChildren="启用" unCheckedChildren="禁用" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
